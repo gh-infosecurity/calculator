@@ -1,34 +1,77 @@
 <!DOCTYPE html>
 <html ng-app="app">
 <head>
-    <title>Yourapp</title>
+    <title>Calculator</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link href="frameworks/css/bootstrap.css" rel="stylesheet"/>
     <link href="frameworks/css/bootstrap-theme.css" rel="stylesheet"/>
+    <link href="frameworks/css/calc_style.css" rel="stylesheet"/>
     <script src="frameworks/js/angular.js"></script>
-    <style type="text/css">
-        body {
-            color: purple;
-            background-color: #eeeeee
-        }
-
-        .well{
-            background: #8c8c8c;
-        }
-
-        .btn {
-            width: 50px;
-            border-radius: 12px;
-        }
-    </style>
     <script>
         var app = angular.module("app", []);
 
-        app.controller("appCtrl", function ($scope) {
+        app.controller("appCtrl", function ($scope, $http) {
             var val = "";
+            var delimiter = undefined;
+            var restMethod = undefined;
+
             $scope.digit = function (item) {
                 val = val + item;
                 $scope.value = val;
+            };
+
+            $scope.clear = function () {
+                val = "";
+                $scope.value = "0";
+            };
+
+            $scope.sum = function () {
+                delimiter = '+';
+                val = val + delimiter;
+                restMethod = 'sum';
+                $scope.value = val;
+            };
+
+            $scope.difference = function () {
+                delimiter = '-';
+                val = val + delimiter;
+                restMethod = 'difference';
+                $scope.value = val;
+            };
+
+            $scope.multiplication = function () {
+                delimiter = '*';
+                val = val + delimiter;
+                restMethod = 'multiplication';
+                $scope.value = val;
+            };
+
+            $scope.division = function () {
+                delimiter = '/';
+                val = val + delimiter;
+                restMethod = 'division';
+                $scope.value = val;
+            };
+
+            $scope.result = function () {
+                var operators = $scope.value.split(delimiter);
+                var request = $http({
+                    method: "post",
+                    headers: {
+                        'Accept': 'application/json'
+                    },
+                    url: "http://localhost:8080/" + restMethod,
+                    data: {
+                        first: operators[0],
+                        second: operators[1]
+                    }
+                });
+
+                request.success(function (data) {
+                            val = data.result;
+                            $scope.value = data.result;
+                        }
+                );
             }
         });
     </script>
@@ -42,34 +85,38 @@
 </nav>
 
 <div class="row">
-    <div class="col-md-2 col-md-offset-5">
-        <div class="well">
+    <div class="container">
+        <div class="well col-lg-3 col-lg-offset-4">
             <input type="text" class="form-control text-right" value="{{value}}" ng-init="value=0">
-            <hr>
+            <hr style="width: 100%; color: black; height: 1px; background-color:black;"/>
             <div class="text-center">
-                <p>
-                    <button type="button" class="btn btn-default btn-lg" ng-click="digit(7)">7</button>
-                    <button type="button" class="btn btn-default btn-lg" ng-click="digit(8)">8</button>
-                    <button type="button" class="btn btn-default btn-lg" ng-click="digit(9)">9</button>
-                    <button type="button" class="btn btn-default btn-lg">/</button>
+                <p class="text-right">
+                    <button type="button" class="btn btn-warning" ng-click="digit(9)">sqrt</button>
+                    <button type="button" class="btn btn-danger" ng-click="clear()">CE</button>
                 </p>
                 <p>
-                    <button type="button" class="btn btn-default btn-lg" ng-click="digit(4)">4</button>
-                    <button type="button" class="btn btn-default btn-lg" ng-click="digit(5)">5</button>
-                    <button type="button" class="btn btn-default btn-lg" ng-click="digit(6)">6</button>
-                    <button type="button" class="btn btn-default btn-lg">*</button>
+                    <button type="button" class="btn btn-success btn-lg" ng-click="digit(7)">7</button>
+                    <button type="button" class="btn btn-success btn-lg" ng-click="digit(8)">8</button>
+                    <button type="button" class="btn btn-success btn-lg" ng-click="digit(9)">9</button>
+                    <button type="button" class="btn btn-info btn-lg" ng-click="division()">/</button>
                 </p>
                 <p>
-                    <button type="button" class="btn btn-default btn-lg" ng-click="digit(1)">1</button>
-                    <button type="button" class="btn btn-default btn-lg" ng-click="digit(2)">2</button>
-                    <button type="button" class="btn btn-default btn-lg" ng-click="digit(3)">3</button>
-                    <button type="button" class="btn btn-default btn-lg">+</button>
+                    <button type="button" class="btn btn-success btn-lg" ng-click="digit(4)">4</button>
+                    <button type="button" class="btn btn-success btn-lg" ng-click="digit(5)">5</button>
+                    <button type="button" class="btn btn-success btn-lg" ng-click="digit(6)">6</button>
+                    <button type="button" class="btn btn-info btn-lg" ng-click="multiplication()">*</button>
                 </p>
                 <p>
-                    <button type="button" class="btn btn-default btn-lg" ng-click="digit(0)">0</button>
-                    <button type="button" class="btn btn-default btn-lg" ng-click="digit('.')">.</button>
-                    <button type="button" class="btn btn-default btn-lg">=</button>
-                    <button type="button" class="btn btn-default btn-lg" ng-click="digit('-')">-</button>
+                    <button type="button" class="btn btn-success btn-lg" ng-click="digit(1)">1</button>
+                    <button type="button" class="btn btn-success btn-lg" ng-click="digit(2)">2</button>
+                    <button type="button" class="btn btn-success btn-lg" ng-click="digit(3)">3</button>
+                    <button type="button" class="btn btn-info btn-lg" ng-click="sum()">+</button>
+                </p>
+                <p>
+                    <button type="button" class="btn btn-success btn-lg" ng-click="digit(0)">0</button>
+                    <button type="button" class="btn btn-success btn-lg" ng-click="digit('.')">.</button>
+                    <button type="button" class="btn btn-success btn-lg" ng-click="result()">=</button>
+                    <button type="button" class="btn btn-info btn-lg" ng-click="difference()">-</button>
                 <p>
             </div>
         </div>

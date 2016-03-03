@@ -1,0 +1,11 @@
+.well {
+    border-color: #0f0f0f;
+    border-radius: 10px;
+    border: 2px solid;
+    background: #eeeeee;
+}
+
+.btn {
+    width: 55px;
+    border-radius: 12px;
+}
