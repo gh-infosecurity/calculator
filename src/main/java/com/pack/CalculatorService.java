@@ -40,9 +40,20 @@ public class CalculatorService {
     @RequestMapping("/division")
     Response division(@RequestBody Request request) {
         Response response = new Response();
-        Double division = request.getFirstValue() / request.getSecondValue();
+        Double division = getDivisionValue(request.getFirstValue(), request.getSecondValue());
         response.setResult(getResult(division));
         return response;
+    }
+
+    private Double getDivisionValue(Double firstValue, Double secondValue) {
+        Double division;
+        if (isInteger(firstValue) && isInteger(secondValue)) {
+            Integer intDivision = firstValue.intValue() / secondValue.intValue();
+            division = intDivision.doubleValue();
+        } else {
+            division = firstValue / secondValue;
+        }
+        return division;
     }
 
     private String getResult(Double sum) {

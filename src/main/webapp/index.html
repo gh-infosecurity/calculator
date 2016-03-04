@@ -13,7 +13,8 @@
         app.controller("appCtrl", function ($scope, $http) {
             var val = "";
             var delimiter = undefined;
-            var restMethod = undefined;
+            var path = undefined;
+            $scope.state = "has-success";
 
             $scope.digit = function (item) {
                 val = val + item;
@@ -28,39 +29,40 @@
             $scope.sum = function () {
                 delimiter = '+';
                 val = val + delimiter;
-                restMethod = 'sum';
+                path = 'sum';
                 $scope.value = val;
             };
 
             $scope.difference = function () {
                 delimiter = '-';
                 val = val + delimiter;
-                restMethod = 'difference';
+                path = 'difference';
                 $scope.value = val;
             };
 
             $scope.multiplication = function () {
                 delimiter = '*';
                 val = val + delimiter;
-                restMethod = 'multiplication';
+                path = 'multiplication';
                 $scope.value = val;
             };
 
             $scope.division = function () {
                 delimiter = '/';
                 val = val + delimiter;
-                restMethod = 'division';
+                path = 'division';
                 $scope.value = val;
             };
 
             $scope.result = function () {
+                const host = "http://localhost:8080/";
                 var operators = $scope.value.split(delimiter);
                 var request = $http({
                     method: "post",
                     headers: {
                         'Accept': 'application/json'
                     },
-                    url: "http://localhost:8080/" + restMethod,
+                    url: host + path,
                     data: {
                         first: operators[0],
                         second: operators[1]
@@ -70,6 +72,12 @@
                 request.success(function (data) {
                             val = data.result;
                             $scope.value = data.result;
+                        }
+                );
+
+                request.error(function (data) {
+                            $scope.state = "has-error";
+                            $scope.value = data.error;
                         }
                 );
             }
@@ -87,7 +95,9 @@
 <div class="row">
     <div class="container">
         <div class="well col-lg-3 col-lg-offset-4">
-            <input type="text" class="form-control text-right" value="{{value}}" ng-init="value=0">
+            <div class="{{state}}">
+                <input type="text" class="form-control text-right" value="{{value}}" ng-init="value=0">
+            </div>
             <hr style="width: 100%; color: black; height: 1px; background-color:black;"/>
             <div class="text-center">
                 <p class="text-right">
