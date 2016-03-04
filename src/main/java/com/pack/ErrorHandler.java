@@ -16,10 +16,26 @@ public class ErrorHandler {
 
     @ExceptionHandler(ArithmeticException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse ArithmeticException(Exception ex) {
+    public ErrorResponse arithmeticException(Exception ex) {
+        log(ex);
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setError(ex.getMessage());
         return errorResponse;
     }
 
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponse runtimeException(Exception ex) {
+        log(ex);
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setError(ex.getMessage());
+        return errorResponse;
+    }
+
+    private void log(Exception e) {
+        log.error(e.getMessage(), e);
+        for (Throwable throwable : e.getSuppressed()) {
+            log.error(throwable.getMessage(), throwable);
+        }
+    }
 }
