@@ -1,4 +1,4 @@
-package com.pack.response;
+package com.education.calculator.response;
 
 public class Response {
     private String result;

@@ -1,6 +1,6 @@
-package com.pack;
+package com.education.calculator;
 
-import com.pack.response.ErrorResponse;
+import com.education.calculator.response.ErrorResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

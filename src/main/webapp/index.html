@@ -16,6 +16,16 @@
             var path = undefined;
             $scope.state = "has-success";
 
+            function isEmpty(str) {
+                return (!str || 0 === str.length);
+            }
+
+            function hasOperator(str) {
+                var array = str.split('');
+                var char = array[array.length - 1];
+                return char === '+' || char === '-' || char === '*' || char === '/';
+            }
+
             $scope.digit = function (item) {
                 val = val + item;
                 $scope.value = val;
@@ -23,35 +33,44 @@
 
             $scope.clear = function () {
                 val = "";
+                $scope.state = "has-success";
                 $scope.value = "0";
             };
 
             $scope.sum = function () {
                 delimiter = '+';
-                val = val + delimiter;
-                path = 'sum';
-                $scope.value = val;
+                if (!isEmpty(val) && !hasOperator(val)) {
+                    val = val + delimiter;
+                    path = 'sum';
+                    $scope.value = val;
+                }
             };
 
             $scope.difference = function () {
                 delimiter = '-';
-                val = val + delimiter;
-                path = 'difference';
-                $scope.value = val;
+                if (!isEmpty(val) && !hasOperator(val)) {
+                    val = val + delimiter;
+                    path = 'difference';
+                    $scope.value = val;
+                }
             };
 
             $scope.multiplication = function () {
                 delimiter = '*';
-                val = val + delimiter;
-                path = 'multiplication';
-                $scope.value = val;
+                if (!isEmpty(val) && !hasOperator(val)) {
+                    val = val + delimiter;
+                    path = 'multiplication';
+                    $scope.value = val;
+                }
             };
 
             $scope.division = function () {
                 delimiter = '/';
-                val = val + delimiter;
-                path = 'division';
-                $scope.value = val;
+                if (!isEmpty(val) && !hasOperator(val)) {
+                    val = val + delimiter;
+                    path = 'division';
+                    $scope.value = val;
+                }
             };
 
             $scope.result = function () {
@@ -129,6 +148,29 @@
                     <button type="button" class="btn btn-info btn-lg" ng-click="difference()">-</button>
                 <p>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="container col-lg-6 col-lg-offset-3">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                Panel Heading
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered">
+                    <tr class="success">
+                        <td>Name</td>
+                        <td>value</td>
+                    </tr>
+                    <tr class="success">
+                        <td>Name</td>
+                        <td>value</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="panel-footer">Panel footer</div>
         </div>
     </div>
 </div>

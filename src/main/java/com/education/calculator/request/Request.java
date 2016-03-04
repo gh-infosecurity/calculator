@@ -1,4 +1,4 @@
-package com.pack.request;
+package com.education.calculator.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

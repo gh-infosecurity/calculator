@@ -1,7 +1,7 @@
-package com.pack;
+package com.education.calculator;
 
-import com.pack.request.Request;
-import com.pack.response.Response;
+import com.education.calculator.request.Request;
+import com.education.calculator.response.Response;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -47,11 +47,10 @@ public class CalculatorService {
 
     private Double getDivisionValue(Double firstValue, Double secondValue) {
         Double division;
-        if (isInteger(firstValue) && isInteger(secondValue)) {
-            Integer intDivision = firstValue.intValue() / secondValue.intValue();
-            division = intDivision.doubleValue();
-        } else {
+        if (secondValue != 0) {
             division = firstValue / secondValue;
+        } else {
+            throw new ArithmeticException("Error " + firstValue + " / by zero");
         }
         return division;
     }
