@@ -15,3 +15,13 @@
 .form-control{
     border: 2px solid;
 }
+
+body {
+    background-color: #999;
+    background-image: url(../../images/bg.jpg);
+    background-size: cover;
+}
+
+span.text-footer{
+    color: white;
+}
