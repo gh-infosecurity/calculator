@@ -111,16 +111,21 @@
     </div>
 </nav>
 
+
 <div class="row">
     <div class="container">
-        <div class="well col-lg-3 col-lg-offset-4">
+        <div class="well">
             <div class="{{state}}">
                 <input type="text" class="form-control text-right" value="{{value}}" ng-init="value=0">
             </div>
             <hr style="width: 100%; color: black; height: 1px; background-color:black;"/>
             <div class="text-center">
-                <p class="text-right">
+                <p>
+                    <button type="button" class="btn btn-warning" ng-click="digit(9)">%</button>
                     <button type="button" class="btn btn-warning" ng-click="digit(9)">sqrt</button>
+                    <button type="button" class="btn btn-warning" ng-click="clear()">
+                        <span class="glyphicon glyphicon-arrow-left"></span>
+                    </button>
                     <button type="button" class="btn btn-danger" ng-click="clear()">CE</button>
                 </p>
                 <p>
