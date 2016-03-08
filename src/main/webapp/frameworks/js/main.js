@@ -115,4 +115,44 @@ app.controller("appCtrl", function ($scope, $http) {
             }
         );
     }
+
+    $scope.sqrt = function () {
+        var request = $http({
+            method: "post",
+            headers: {
+                'Accept': 'application/json'
+            },
+            url: "http://localhost:8080/sqrt",
+            data: {
+                value: val
+            }
+        });
+
+        request.success(function (data) {
+                val = data.result;
+                $scope.value = data.result;
+                $scope.operations = getOperations();
+            }
+        );
+    };
+
+    $scope.pow = function () {
+        var request = $http({
+            method: "post",
+            headers: {
+                'Accept': 'application/json'
+            },
+            url: "http://localhost:8080/pow",
+            data: {
+                value: val
+            }
+        });
+
+        request.success(function (data) {
+                val = data.result;
+                $scope.value = data.result;
+                $scope.operations = getOperations();
+            }
+        );
+    }
 });

@@ -3,6 +3,7 @@ package com.education.calculator;
 import com.education.calculator.dao.OperationDao;
 import com.education.calculator.model.Operation;
 import com.education.calculator.request.Request;
+import com.education.calculator.request.SingleValueRequest;
 import com.education.calculator.response.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -66,6 +67,28 @@ public class CalculatorService {
         return response;
     }
 
+    @RequestMapping("/sqrt")
+    Response sqrt(@RequestBody SingleValueRequest request) {
+        Response response = new Response();
+        double sqrt = Math.sqrt(request.getValue());
+        String result = getResult(sqrt);
+        response.setResult(result);
+
+        dao.create(getSqrtOperation(request, result, "sqrt", true));
+        return response;
+    }
+
+    @RequestMapping("/pow")
+    Response sup(@RequestBody SingleValueRequest request) {
+        Response response = new Response();
+        double pow = Math.pow(request.getValue(), 2);
+        String result = getResult(pow);
+        response.setResult(result);
+
+        dao.create(getSqrtOperation(request, result, "pow 2", true));
+        return response;
+    }
+
     @RequestMapping("/operations")
     Response operations() {
         Response response = new Response();
@@ -73,6 +96,19 @@ public class CalculatorService {
         Collections.reverse(operations);
         response.setOperations(operations);
         return response;
+    }
+
+    private Operation getSqrtOperation(SingleValueRequest request, String result, String operator, boolean state) {
+        StringBuilder expression = new StringBuilder(operator);
+        expression.append("(")
+                .append(request.getValue())
+                .append(")")
+                .append(" = ")
+                .append(result);
+        Operation operation = new Operation();
+        operation.setExpression(expression.toString());
+        operation.setState(state);
+        return operation;
     }
 
     private Operation getOperation(Request request, String result, String operator, boolean state) {
