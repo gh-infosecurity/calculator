@@ -91,6 +91,7 @@
                 request.success(function (data) {
                             val = data.result;
                             $scope.value = data.result;
+                            $scope.operations = data.operations;
                         }
                 );
 
@@ -167,12 +168,14 @@
                 <div class="panel-body">
                     <table class="table table-bordered">
                         <tr class="success">
-                            <td>Name</td>
-                            <td>value</td>
+                            <td>ID</td>
+                            <td>Expression</td>
+                            <td>Correct</td>
                         </tr>
-                        <tr class="success">
-                            <td>Name</td>
-                            <td>value</td>
+                        <tr class="success" ng-repeat="operation in operations">
+                            <td>{{operation.id}}</td>
+                            <td>{{operation.expression}}</td>
+                            <td>{{operation.state}}</td>
                         </tr>
                     </table>
                 </div>

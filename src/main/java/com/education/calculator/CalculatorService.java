@@ -1,11 +1,16 @@
 package com.education.calculator;
 
+import com.education.calculator.dao.OperationDao;
+import com.education.calculator.model.Operation;
 import com.education.calculator.request.Request;
 import com.education.calculator.response.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(method = RequestMethod.POST,
@@ -13,11 +18,19 @@ import org.springframework.web.bind.annotation.RestController;
         produces = "application/json")
 public class CalculatorService {
 
+    @Autowired
+    private OperationDao dao;
+
     @RequestMapping("/sum")
     Response sum(@RequestBody Request request) {
         Response response = new Response();
         Double sum = request.getFirstValue() + request.getSecondValue();
-        response.setResult(getResult(sum));
+        String result = getResult(sum);
+        response.setResult(result);
+
+        dao.create(getOperation(request, result, "+", true));
+        List<Operation> operations = dao.getAll();
+        response.setOperations(operations);
         return response;
     }
 
@@ -25,7 +38,12 @@ public class CalculatorService {
     Response difference(@RequestBody Request request) {
         Response response = new Response();
         Double difference = request.getFirstValue() - request.getSecondValue();
-        response.setResult(getResult(difference));
+        String result = getResult(difference);
+        response.setResult(result);
+
+        dao.create(getOperation(request, result, "-", true));
+        List<Operation> operations = dao.getAll();
+        response.setOperations(operations);
         return response;
     }
 
@@ -33,24 +51,49 @@ public class CalculatorService {
     Response multiplication(@RequestBody Request request) {
         Response response = new Response();
         Double multiplication = request.getFirstValue() * request.getSecondValue();
-        response.setResult(getResult(multiplication));
+        String result = getResult(multiplication);
+        response.setResult(result);
+
+        dao.create(getOperation(request, result, "*", true));
+        List<Operation> operations = dao.getAll();
+        response.setOperations(operations);
         return response;
     }
 
     @RequestMapping("/division")
     Response division(@RequestBody Request request) {
         Response response = new Response();
-        Double division = getDivisionValue(request.getFirstValue(), request.getSecondValue());
-        response.setResult(getResult(division));
+        Double division = getDivisionValue(request);
+        String result = getResult(division);
+        response.setResult(result);
+
+        dao.create(getOperation(request, result, "/", true));
+        List<Operation> operations = dao.getAll();
+        response.setOperations(operations);
         return response;
     }
 
-    private Double getDivisionValue(Double firstValue, Double secondValue) {
+    private Operation getOperation(Request request, String result, String operator, boolean state) {
+        StringBuilder expression = new StringBuilder();
+        expression.append(request.getFirstValue())
+                .append(operator)
+                .append(request.getSecondValue())
+                .append(" = ")
+                .append(result);
+        Operation operation = new Operation();
+        operation.setExpression(expression.toString());
+        operation.setState(state);
+        return operation;
+    }
+
+    private Double getDivisionValue(Request request) {
         Double division;
-        if (secondValue != 0) {
-            division = firstValue / secondValue;
+        if (request.getSecondValue() != 0) {
+            division = request.getFirstValue() / request.getSecondValue();
         } else {
-            throw new ArithmeticException("Error " + firstValue + " / by zero");
+            String errorMessage = "Error " + request.getFirstValue() + " / by zero";
+            dao.create(getOperation(request, errorMessage, "/", false));
+            throw new ArithmeticException(errorMessage);
         }
         return division;
     }
