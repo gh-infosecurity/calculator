@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -29,8 +30,6 @@ public class CalculatorService {
         response.setResult(result);
 
         dao.create(getOperation(request, result, "+", true));
-        List<Operation> operations = dao.getAll();
-        response.setOperations(operations);
         return response;
     }
 
@@ -42,8 +41,6 @@ public class CalculatorService {
         response.setResult(result);
 
         dao.create(getOperation(request, result, "-", true));
-        List<Operation> operations = dao.getAll();
-        response.setOperations(operations);
         return response;
     }
 
@@ -55,8 +52,6 @@ public class CalculatorService {
         response.setResult(result);
 
         dao.create(getOperation(request, result, "*", true));
-        List<Operation> operations = dao.getAll();
-        response.setOperations(operations);
         return response;
     }
 
@@ -68,7 +63,14 @@ public class CalculatorService {
         response.setResult(result);
 
         dao.create(getOperation(request, result, "/", true));
+        return response;
+    }
+
+    @RequestMapping("/operations")
+    Response operations() {
+        Response response = new Response();
         List<Operation> operations = dao.getAll();
+        Collections.reverse(operations);
         response.setOperations(operations);
         return response;
     }

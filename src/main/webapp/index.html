@@ -7,102 +7,7 @@
     <link href="frameworks/css/bootstrap-theme.css" rel="stylesheet"/>
     <link href="frameworks/css/calc_style.css" rel="stylesheet"/>
     <script src="frameworks/js/angular.js"></script>
-    <script>
-        var app = angular.module("app", []);
-
-        app.controller("appCtrl", function ($scope, $http) {
-            var val = "";
-            var delimiter = undefined;
-            var path = undefined;
-            $scope.state = "has-success";
-
-            function isEmpty(str) {
-                return (!str || 0 === str.length);
-            }
-
-            function hasOperator(str) {
-                var array = str.split('');
-                var char = array[array.length - 1];
-                return char === '+' || char === '-' || char === '*' || char === '/';
-            }
-
-            $scope.digit = function (item) {
-                val = val + item;
-                $scope.value = val;
-            };
-
-            $scope.clear = function () {
-                val = "";
-                $scope.state = "has-success";
-                $scope.value = "0";
-            };
-
-            $scope.sum = function () {
-                delimiter = '+';
-                if (!isEmpty(val) && !hasOperator(val)) {
-                    val = val + delimiter;
-                    path = 'sum';
-                    $scope.value = val;
-                }
-            };
-
-            $scope.difference = function () {
-                delimiter = '-';
-                if (!isEmpty(val) && !hasOperator(val)) {
-                    val = val + delimiter;
-                    path = 'difference';
-                    $scope.value = val;
-                }
-            };
-
-            $scope.multiplication = function () {
-                delimiter = '*';
-                if (!isEmpty(val) && !hasOperator(val)) {
-                    val = val + delimiter;
-                    path = 'multiplication';
-                    $scope.value = val;
-                }
-            };
-
-            $scope.division = function () {
-                delimiter = '/';
-                if (!isEmpty(val) && !hasOperator(val)) {
-                    val = val + delimiter;
-                    path = 'division';
-                    $scope.value = val;
-                }
-            };
-
-            $scope.result = function () {
-                const host = "http://localhost:8080/";
-                var operators = $scope.value.split(delimiter);
-                var request = $http({
-                    method: "post",
-                    headers: {
-                        'Accept': 'application/json'
-                    },
-                    url: host + path,
-                    data: {
-                        first: operators[0],
-                        second: operators[1]
-                    }
-                });
-
-                request.success(function (data) {
-                            val = data.result;
-                            $scope.value = data.result;
-                            $scope.operations = data.operations;
-                        }
-                );
-
-                request.error(function (data) {
-                            $scope.state = "has-error";
-                            $scope.value = data.error;
-                        }
-                );
-            }
-        });
-    </script>
+    <script src="frameworks/js/main.js"></script>
 </head>
 <body ng-controller="appCtrl">
 <header>
@@ -124,8 +29,8 @@
                 <div class="text-center">
                     <p>
                         <button type="button" class="btn btn-warning" ng-click="digit(9)">%</button>
-                        <button type="button" class="btn btn-warning" ng-click="digit(9)">sqrt</button>
-                        <button type="button" class="btn btn-warning" ng-click="clear()">
+                        <button type="button" class="btn btn-warning" ng-click="clearChar()">sqrt</button>
+                        <button type="button" class="btn btn-warning" ng-click="clearlastchar()">
                             <span class="glyphicon glyphicon-arrow-left"></span>
                         </button>
                         <button type="button" class="btn btn-danger" ng-click="clear()">CE</button>
@@ -168,18 +73,25 @@
                 <div class="panel-body">
                     <table class="table table-bordered">
                         <tr class="success">
-                            <td>ID</td>
-                            <td>Expression</td>
-                            <td>Correct</td>
+                            <td class="text-center">ID</td>
+                            <td class="text-center">Expression</td>
+                            <td class="text-center">Correct</td>
                         </tr>
-                        <tr class="success" ng-repeat="operation in operations">
-                            <td>{{operation.id}}</td>
-                            <td>{{operation.expression}}</td>
-                            <td>{{operation.state}}</td>
+                        <tr ng-class="{'success':operation.state, 'danger':!operation.state}" ng-repeat="operation in operations">
+                            <td class="text-center">{{operation.id}}</td>
+                            <td class="text-left">{{operation.expression}}</td>
+                            <td class="text-center">
+                                <span ng-class="{'label label-success':operation.state, 'label label-danger':!operation.state}"
+                                      ng-init="state = operation.state ? 'Yes' : 'No'">
+                                    {{state}}
+                                </span>
+                            </td>
                         </tr>
                     </table>
                 </div>
-                <div class="panel-footer">Panel footer</div>
+                <div class="panel-footer">
+                    <span>All operations count are {{operations.length}}</span>
+                </div>
             </div>
         </div>
     </div>
