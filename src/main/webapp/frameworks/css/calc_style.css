@@ -12,7 +12,7 @@
     border-radius: 12px;
 }
 
-.form-control{
+.form-control {
     border: 2px solid;
 }
 
@@ -22,6 +22,11 @@ body {
     background-size: cover;
 }
 
-span.text-footer{
+input[type="text"] {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 18px;
+}
+
+span.text-footer {
     color: white;
 }
