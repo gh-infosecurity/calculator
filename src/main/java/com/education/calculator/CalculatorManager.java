@@ -10,7 +10,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Collections;
 import java.util.List;
 
+import static com.education.calculator.CalculatorConstants.CLOSE_QUOTE;
+import static com.education.calculator.CalculatorConstants.DILIMITER;
+import static com.education.calculator.CalculatorConstants.DIVISION;
+import static com.education.calculator.CalculatorConstants.MINUS;
+import static com.education.calculator.CalculatorConstants.MULTIPLICATION;
+import static com.education.calculator.CalculatorConstants.OPEN_QUOTE;
+import static com.education.calculator.CalculatorConstants.PLUS;
+import static com.education.calculator.CalculatorConstants.POW;
+import static com.education.calculator.CalculatorConstants.SQRT;
+
 public class CalculatorManager {
+
     private OperationDao dao;
 
     @Autowired
@@ -24,7 +35,7 @@ public class CalculatorManager {
         String result = getResult(sum);
         response.setResult(result);
 
-        dao.create(getOperation(request, result, "+", true));
+        dao.create(getOperation(request, result, PLUS, true));
         return response;
     }
 
@@ -34,7 +45,7 @@ public class CalculatorManager {
         String result = getResult(difference);
         response.setResult(result);
 
-        dao.create(getOperation(request, result, "-", true));
+        dao.create(getOperation(request, result, MINUS, true));
         return response;
 
     }
@@ -45,7 +56,7 @@ public class CalculatorManager {
         String result = getResult(multiplication);
         response.setResult(result);
 
-        dao.create(getOperation(request, result, "*", true));
+        dao.create(getOperation(request, result, MULTIPLICATION, true));
         return response;
     }
 
@@ -55,7 +66,7 @@ public class CalculatorManager {
         String result = getResult(division);
         response.setResult(result);
 
-        dao.create(getOperation(request, result, "/", true));
+        dao.create(getOperation(request, result, DIVISION, true));
         return response;
     }
 
@@ -65,7 +76,7 @@ public class CalculatorManager {
             division = request.getFirstValue() / request.getSecondValue();
         } else {
             String errorMessage = "Error " + request.getFirstValue() + " / by zero";
-            dao.create(getOperation(request, errorMessage, "/", false));
+            dao.create(getOperation(request, errorMessage, DIVISION, false));
             throw new ArithmeticException(errorMessage);
         }
         return division;
@@ -77,16 +88,16 @@ public class CalculatorManager {
         String result = getResult(sqrt);
         response.setResult(result);
 
-        dao.create(getSqrtOperation(request, result, "sqrt", true));
+        dao.create(getSqrtOperation(request, result, SQRT, true));
         return response;
     }
 
     private Operation getSqrtOperation(SingleValueRequest request, String result, String operator, boolean state) {
         StringBuilder expression = new StringBuilder(operator);
-        expression.append("(")
+        expression.append(OPEN_QUOTE)
                 .append(request.getValue())
-                .append(")")
-                .append(" = ")
+                .append(CLOSE_QUOTE)
+                .append(DILIMITER)
                 .append(result);
         Operation operation = new Operation();
         operation.setExpression(expression.toString());
@@ -100,7 +111,7 @@ public class CalculatorManager {
         String result = getResult(pow);
         response.setResult(result);
 
-        dao.create(getSqrtOperation(request, result, "pow 2", true));
+        dao.create(getSqrtOperation(request, result, POW, true));
         return response;
     }
 
@@ -117,7 +128,7 @@ public class CalculatorManager {
         expression.append(request.getFirstValue())
                 .append(operator)
                 .append(request.getSecondValue())
-                .append(" = ")
+                .append(DILIMITER)
                 .append(result);
         Operation operation = new Operation();
         operation.setExpression(expression.toString());
