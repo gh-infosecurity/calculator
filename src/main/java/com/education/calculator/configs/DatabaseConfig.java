@@ -1,5 +1,6 @@
 package com.education.calculator.configs;
 
+import com.education.calculator.CalculatorManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -75,5 +76,10 @@ public class DatabaseConfig {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
         return transactionManager;
+    }
+
+    @Bean
+    public CalculatorManager calculatorManager(){
+        return new CalculatorManager();
     }
 }
