@@ -635,9 +635,9 @@ This release resolves many issues and include the following notable changes:
 Developers are requested to always test with the latest versions. And any CodePens provided in issue reports should use:
 
 *  Angular Material HEAD (0.11.1 or greater)
-  *  Bower Install - https://github.com/angular/bower-material/blob/master/angular-module.js
+  *  Bower Install - https://github.com/angular/bower-material/blob/master/angular-material.js
   *  Bower Install - https://github.com/angular/bower-material/blob/master/angular-material.css
-  *  RAWGIT - https://rawgit.com/angular/bower-material/master/angular-module.js
+  *  RAWGIT - https://rawgit.com/angular/bower-material/master/angular-material.js
   *  RAWGIT - https://rawgit.com/angular/bower-material/master/angular-material.css
 * AngularJS Latest Release versions:
   *  Angular 1.3.19 (or greater)
@@ -1394,7 +1394,7 @@ changed to `viewBoxSize`
 <a name="0.9.4"></a>
 ### 0.9.4  (2015-05-15)
 
-This interim release **fixes** an incorrect deployment of `angular-module.js`; which added the Closure Library **Namespace** features using `goog.provide()`. Only source in `/modules/closure/**.js` should use this namespacing.
+This interim release **fixes** an incorrect deployment of `angular-material.js`; which added the Closure Library **Namespace** features using `goog.provide()`. Only source in `/modules/closure/**.js` should use this namespacing.
 #### Features
 
 * **build:** add script to snapshot docs site ([76e36722](https://github.com/angular/material/commit/76e36722e07846b518612e9073785a279b3027cd), closes [#2852](https://github.com/angular/material/issues/2852))
@@ -2235,7 +2235,7 @@ To this:
 * Themes are no longer defined by linked CSS files.
 
 Themes are now defined through Javascript only. A 'theme template' is
-bundled into angular-module.js, and then Javascript is used to
+bundled into angular-material.js, and then Javascript is used to
 generate theme css for every theme the user defines.
 
 The `default` theme is still shipped with angular-material.

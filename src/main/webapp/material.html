@@ -22,9 +22,39 @@
     </div>
 </md-toolbar>
 <md-content>
-    <div layout="row" layout-align-lt-md="center start">
-        <div layout-fill="row">
-            <h1>{{hello}}</h1>
+    <div layout="row" layout-align="center start">
+        <div layout-fill>
+            <md-card>
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">Card title!</span>
+                    </md-card-title-text>
+                </md-card-title>
+                <md-card-content>
+                    <p>Whatever you do, do not click the button below.</p>
+                    <p>{{hello}}</p>
+                </md-card-content>
+                <md-card-actions layout="column" layout-align="start">
+                    <md-button ng-click="showAlert($event)" class="md-primary md-raised">I Alert!</md-button>
+                </md-card-actions>
+                <div class="dialog-demo-content" layout="row" layout-wrap="" layout-margin="" layout-align="center">
+                    <md-button class="md-primary md-raised" ng-click="showAlert($event)">
+                        Alert Dialog
+                    </md-button>
+                    <md-button class="md-primary md-raised" ng-click="showConfirm($event)">
+                        Confirm Dialog
+                    </md-button>
+                    <md-button class="md-primary md-raised" ng-click="showPrompt($event)">
+                        Prompt Dialog
+                    </md-button>
+                    <md-button class="md-primary md-raised" ng-click="showAdvanced($event)">
+                        Custom Dialog
+                    </md-button>
+                    <md-button class="md-primary md-raised" ng-click="showTabDialog($event)">
+                        Tab Dialog
+                    </md-button>
+                </div>
+            </md-card>
         </div>
     </div>
 </md-content>
