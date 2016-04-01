@@ -1,21 +1,30 @@
 package com.education.calculator.configs;
 
 import com.education.calculator.CalculatorManager;
+import com.education.calculator.CalculatorService;
+import com.education.calculator.dao.OperationDao;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.sql.DataSource;
 import java.util.Properties;
 
+@EnableWebMvc
 @Configuration
 @EnableTransactionManagement
-public class DatabaseConfig {
+@PropertySource("classpath:application.properties")
+public class DatabaseConfig extends WebMvcConfigurerAdapter {
 
     @Value("${db.driver}")
     private String DB_DRIVER;
@@ -41,6 +50,16 @@ public class DatabaseConfig {
     @Value("${entitymanager.packagesToScan}")
     private String ENTITYMANAGER_PACKAGES_TO_SCAN;
 
+    @Override
+    public void addResourceHandlers(final ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/**").addResourceLocations("/");
+    }
+
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer propertiesConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
+
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -59,7 +78,6 @@ public class DatabaseConfig {
         entityManagerFactory.setDataSource(dataSource());
         entityManagerFactory.setPackagesToScan(ENTITYMANAGER_PACKAGES_TO_SCAN);
         entityManagerFactory.setJpaProperties(getProperties());
-
         return entityManagerFactory;
     }
 
@@ -79,7 +97,17 @@ public class DatabaseConfig {
     }
 
     @Bean
-    public CalculatorManager calculatorManager(){
+    public CalculatorManager calculatorManager() {
         return new CalculatorManager();
+    }
+
+    @Bean
+    public OperationDao operationDao() {
+        return new OperationDao();
+    }
+
+    @Bean
+    public CalculatorService calculatorService() {
+        return new CalculatorService();
     }
 }

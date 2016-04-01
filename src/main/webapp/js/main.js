@@ -70,7 +70,7 @@ app.controller("appCtrl", function ($scope, $http) {
     };
 
     $scope.result = function () {
-        const host = "http://localhost:8080/";
+        const host = "http://localhost:8084/";
         var operators = $scope.value.split(delimiter);
         var request = $http({
             method: "post",
@@ -106,7 +106,7 @@ app.controller("appCtrl", function ($scope, $http) {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            url: "http://localhost:8080/operations",
+            url: "http://localhost:8084/operations",
             data: {}
         });
 
@@ -122,7 +122,7 @@ app.controller("appCtrl", function ($scope, $http) {
             headers: {
                 'Accept': 'application/json'
             },
-            url: "http://localhost:8080/sqrt",
+            url: "http://localhost:8084/sqrt",
             data: {
                 value: val
             }
@@ -142,7 +142,7 @@ app.controller("appCtrl", function ($scope, $http) {
             headers: {
                 'Accept': 'application/json'
             },
-            url: "http://localhost:8080/pow",
+            url: "http://localhost:8084/pow",
             data: {
                 value: val
             }
